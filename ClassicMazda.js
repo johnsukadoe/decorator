@@ -1,7 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var LeatherSeatsDecorator_1 = require("./LeatherSeatsDecorator");
-var SunroofDecorator_1 = require("./SunroofDecorator");
 var ClassicMazda = /** @class */ (function () {
     function ClassicMazda() {
         this.description = 'Базовая Mazda';
@@ -11,10 +7,41 @@ var ClassicMazda = /** @class */ (function () {
     };
     return ClassicMazda;
 }());
-var basicMazda = new ClassicMazda();
-console.log("".concat(basicMazda.description, ": $").concat(basicMazda.cost()));
-var mazdaWithLeatherSeats = new LeatherSeatsDecorator_1.default(basicMazda);
-console.log("".concat(mazdaWithLeatherSeats.description(), ": $").concat(mazdaWithLeatherSeats.cost()));
-var mazdaWithSunroof = new SunroofDecorator_1.default(basicMazda);
-console.log("".concat(mazdaWithSunroof.description(), ": $").concat(mazdaWithSunroof.cost()));
-exports.default = ClassicMazda;
+var LeatherSeatsDecorator = /** @class */ (function () {
+    function LeatherSeatsDecorator(mazda) {
+        this.mazda = mazda;
+    }
+    LeatherSeatsDecorator.prototype.cost = function () {
+        return this.mazda.cost() + 1500;
+    };
+    Object.defineProperty(LeatherSeatsDecorator.prototype, "description", {
+        get: function () {
+            return this.mazda.description + ' с кожаными сиденьями';
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return LeatherSeatsDecorator;
+}());
+var SunroofDecorator = /** @class */ (function () {
+    function SunroofDecorator(mazda) {
+        this.mazda = mazda;
+    }
+    SunroofDecorator.prototype.cost = function () {
+        return this.mazda.cost() + 1000;
+    };
+    Object.defineProperty(SunroofDecorator.prototype, "description", {
+        get: function () {
+            return this.mazda.description + ', с люком';
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return SunroofDecorator;
+}());
+var mazda = new ClassicMazda();
+console.log(mazda.description, mazda.cost());
+var mazdaWithSunroof = new SunroofDecorator(mazda);
+console.log(mazdaWithSunroof.description, mazdaWithSunroof.cost());
+var mazdaWithLeatherSeats = new LeatherSeatsDecorator(mazdaWithSunroof);
+console.log(mazdaWithLeatherSeats.description, mazdaWithLeatherSeats.cost());

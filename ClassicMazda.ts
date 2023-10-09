@@ -1,25 +1,59 @@
-import LeatherSeatsDecorator from './LeatherSeatsDecorator';
-import SunroofDecorator from './SunroofDecorator';
+interface iMazda {
+    cost(): number;
+    description: string;
+}
 
-class ClassicMazda{
-    description:string;
-    constructor(){
-        this.description= 'Базовая Mazda'
+class ClassicMazda implements iMazda {
+    description: string;
+
+    constructor() {
+        this.description = 'Базовая Mazda';
     }
-    cost():number{
+
+    cost(): number {
         return 20000;
     }
 }
 
-const basicMazda = new ClassicMazda();
-console.log(`${basicMazda.description}: $${basicMazda.cost()}`);
+class LeatherSeatsDecorator implements iMazda {
+    private mazda: ClassicMazda;
 
-const mazdaWithLeatherSeats = new LeatherSeatsDecorator(basicMazda);
-console.log(`${mazdaWithLeatherSeats.description()}: $${mazdaWithLeatherSeats.cost()}`);
+    constructor(mazda: ClassicMazda) {
+        this.mazda = mazda;
+    }
 
-const mazdaWithSunroof = new SunroofDecorator(basicMazda);
-console.log(`${mazdaWithSunroof.description()}: $${mazdaWithSunroof.cost()}`);
+    cost(): number {
+        return this.mazda.cost() + 1500;
+    }
+
+    get description(): string {
+        return this.mazda.description + ' с кожаными сиденьями';
+    }
+}
+
+class SunroofDecorator implements iMazda {
+    private mazda: ClassicMazda;
+
+    constructor(mazda: ClassicMazda) {
+        this.mazda = mazda;
+    }
+
+    cost(): number {
+        return this.mazda.cost() + 1000;
+    }
+
+    get description(): string {
+        return this.mazda.description + ', с люком';
+    }
+}
+
+const mazda = new ClassicMazda()
+console.log(mazda.description, mazda.cost());
 
 
+const mazdaWithSunroof = new SunroofDecorator(mazda);
+console.log(mazdaWithSunroof.description, mazdaWithSunroof.cost());
 
-export default ClassicMazda;
+
+const mazdaWithLeatherSeats = new LeatherSeatsDecorator(mazdaWithSunroof);
+console.log(mazdaWithLeatherSeats.description, mazdaWithLeatherSeats.cost());
